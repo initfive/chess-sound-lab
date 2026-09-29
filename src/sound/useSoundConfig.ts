@@ -10,8 +10,11 @@ import {
 } from './presets'
 
 const STORAGE_KEY = 'chess-sound-lab:v1'
+/** Bump when a saved default should be re-applied (see migrations in load()). */
+const CONFIG_VERSION = 2
 
 export interface SoundConfigState {
+  version?: number
   presets: Preset[]
   activePresetId: string
   global: GlobalSettings
@@ -29,6 +32,7 @@ type Action =
   | { type: 'replaceAll'; state: SoundConfigState }
 
 const initialState = (): SoundConfigState => ({
+  version: CONFIG_VERSION,
   presets: structuredClone(DEFAULT_PRESETS),
   activePresetId: DEFAULT_PRESETS[0].id,
   global: { ...DEFAULT_GLOBAL },
@@ -43,7 +47,12 @@ function load(): SoundConfigState {
     const presets = Array.isArray(parsed.presets) && parsed.presets.length ? parsed.presets : base.presets
     // Fill in any events added since the config was saved.
     for (const p of presets) p.events = { ...structuredClone(ORIGINAL_EVENTS), ...p.events }
+    const savedVersion = parsed.version ?? 1
+    const bot = { ...base.global.bot, ...(parsed.global?.bot ?? {}) }
+    // v2: Stockfish became the default opponent.
+    if (savedVersion < 2) bot.kind = 'stockfish'
     return {
+      version: CONFIG_VERSION,
       presets,
       activePresetId: presets.some((p) => p.id === parsed.activePresetId)
         ? (parsed.activePresetId as string)
@@ -51,7 +60,7 @@ function load(): SoundConfigState {
       global: {
         ...base.global,
         ...(parsed.global ?? {}),
-        bot: { ...base.global.bot, ...(parsed.global?.bot ?? {}) },
+        bot,
       },
     }
   } catch {

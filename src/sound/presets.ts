@@ -73,6 +73,6 @@ export const DEFAULT_GLOBAL: GlobalSettings = {
   masterVolume: 0.9,
   muted: false,
   layering: 'single',
-  bot: { kind: 'off', side: 'b', skill: 5, moveTimeMs: 300 },
+  bot: { kind: 'stockfish', side: 'b', skill: 5, moveTimeMs: 300 },
   theme: 'dark',
 }
