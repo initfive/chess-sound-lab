@@ -1,0 +1,48 @@
+/**
+ * Chess events the lab can react to. Order = priority (first wins in
+ * "single" layering mode). Add a new event here + a default in presets.ts.
+ */
+export type EventId =
+  | 'checkmate'
+  | 'check'
+  | 'promotion'
+  | 'castle'
+  | 'capture'
+  | 'moveWhite'
+  | 'moveBlack'
+  | 'illegal'
+  | 'gameStart'
+
+export interface EventDef {
+  id: EventId
+  label: string
+  hint: string
+  /** Events in the same group compete in "single" layering mode. */
+  group: 'move' | 'standalone'
+}
+
+export const EVENTS: EventDef[] = [
+  { id: 'moveWhite', label: 'Move · White', hint: 'Player 1 quiet move', group: 'move' },
+  { id: 'moveBlack', label: 'Move · Black', hint: 'Player 2 / opponent quiet move', group: 'move' },
+  { id: 'capture', label: 'Capture', hint: 'Any capture incl. en passant', group: 'move' },
+  { id: 'castle', label: 'Castle', hint: 'King- or queen-side', group: 'move' },
+  { id: 'promotion', label: 'Promotion', hint: 'Pawn reaches last rank', group: 'move' },
+  { id: 'check', label: 'Check', hint: 'Move gives check', group: 'move' },
+  { id: 'checkmate', label: 'Checkmate', hint: 'Game ends by mate', group: 'move' },
+  { id: 'illegal', label: 'Illegal move', hint: 'Piece dropped on an illegal square', group: 'standalone' },
+  { id: 'gameStart', label: 'Game start', hint: 'Played on Reset Game', group: 'standalone' },
+]
+
+export const EVENT_PRIORITY: EventId[] = [
+  'checkmate',
+  'check',
+  'promotion',
+  'castle',
+  'capture',
+  'moveWhite',
+  'moveBlack',
+  'illegal',
+  'gameStart',
+]
+
+export const eventById = new Map(EVENTS.map((e) => [e.id, e]))
