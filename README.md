@@ -51,6 +51,15 @@ Layering (Global): *Single* plays only the highest-priority event of a move
 (checkmate → check → promotion → castle → capture → move); *Stack* plays every
 matching event so you can layer sounds using the offsets.
 
+## Opponent
+
+Under the board choose an opponent: *Off* (you play both sides), *Random mover*,
+or *Stockfish 19* with a skill slider (0 = weakest, 20 = full strength) and a
+side switch so the bot can play White or Black. Stockfish runs in a Web Worker
+from `public/engine/` (the 1.8 MB "lite single-threaded" WASM build, so no
+special headers are needed). Update it with `npm run engine:update` after
+bumping the `stockfish` dev dependency.
+
 Shortcuts: Z undo · R reset · F flip · M mute · 1–9 preset · Space replay last.
 
 ## Structure
@@ -62,7 +71,8 @@ src/audio/library.ts       sample list helpers
 src/sound/events.ts        event ids, labels, priority   ← add new events here
 src/sound/presets.ts       default mapping + preset types
 src/sound/useSoundConfig.ts  presets/settings state (localStorage)
-src/chess/useChessGame.ts  chess.js game state, click/drag moves, bot
+src/chess/useChessGame.ts  chess.js game state, click/drag moves, opponent bot
+src/chess/stockfish.ts     UCI wrapper around the Stockfish worker
 src/chess/detectEvents.ts  chess.js move → event ids
 src/components/            Board, EventPanel, PresetBar, SampleLibrary, …
 ```

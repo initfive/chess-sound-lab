@@ -66,7 +66,7 @@ export default function App() {
     [playEvents],
   )
 
-  const game = useChessGame({ onEvents: handleEvents, botPlaysBlack: state.global.botPlaysBlack })
+  const game = useChessGame({ onEvents: handleEvents, bot: state.global.bot })
 
   const replay = useCallback(
     (entry: LogEntry) => {
@@ -159,12 +159,13 @@ export default function App() {
             status={game.status}
             moveCount={game.moveCount}
             muted={state.global.muted}
-            botPlaysBlack={state.global.botPlaysBlack}
+            bot={state.global.bot}
+            engineStatus={game.engineStatus}
             onUndo={game.undo}
             onReset={game.reset}
             onFlip={game.flip}
             onToggleMute={() => dispatch({ type: 'updateGlobal', patch: { muted: !state.global.muted } })}
-            onToggleBot={() => dispatch({ type: 'updateGlobal', patch: { botPlaysBlack: !state.global.botPlaysBlack } })}
+            onBotChange={(patch) => dispatch({ type: 'updateGlobal', patch: { bot: { ...state.global.bot, ...patch } } })}
           />
           <EventLog entries={log} onReplay={replay} onClear={() => setLog([])} />
         </section>

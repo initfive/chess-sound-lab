@@ -1,7 +1,9 @@
 import { Chess, type Move, type Square } from 'chess.js'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react'
 import type { EventId } from '../sound/events'
+import type { BotSettings } from '../sound/presets'
 import { detectMoveEvents } from './detectEvents'
+import { stockfish } from './stockfish'
 
 export interface EventPayload {
   events: EventId[]
@@ -12,10 +14,10 @@ export interface EventPayload {
 
 interface Options {
   onEvents: (payload: EventPayload) => void
-  botPlaysBlack: boolean
+  bot: BotSettings
 }
 
-export function useChessGame({ onEvents, botPlaysBlack }: Options) {
+export function useChessGame({ onEvents, bot }: Options) {
   const chessRef = useRef(new Chess())
   const [fen, setFen] = useState(() => chessRef.current.fen())
   const [orientation, setOrientation] = useState<'white' | 'black'>('white')
@@ -28,11 +30,11 @@ export function useChessGame({ onEvents, botPlaysBlack }: Options) {
 
   /** Try a move; emits sound events. Returns true if legal. */
   const tryMove = useCallback(
-    (from: string, to: string): boolean => {
+    (from: string, to: string, promotion = 'q'): boolean => {
       const chess = chessRef.current
       let move: Move
       try {
-        move = chess.move({ from, to, promotion: 'q' })
+        move = chess.move({ from, to, promotion })
       } catch {
         onEventsRef.current({ events: ['illegal'], from, to })
         return false
@@ -45,16 +47,20 @@ export function useChessGame({ onEvents, botPlaysBlack }: Options) {
     [sync],
   )
 
+  const botOn = bot.kind !== 'off'
+
   const undo = useCallback(() => {
     const chess = chessRef.current
-    // With the bot on, undo both plies so it's White's turn again.
+    stockfish.cancel()
     chess.undo()
-    if (botPlaysBlack && chess.turn() === 'b') chess.undo()
+    // With a bot on, undo its reply too so it's the human's turn again.
+    if (botOn && chess.turn() === bot.side) chess.undo()
     setSelected(null)
     sync()
-  }, [botPlaysBlack, sync])
+  }, [botOn, bot.side, sync])
 
   const reset = useCallback(() => {
+    stockfish.cancel()
     chessRef.current.reset()
     setSelected(null)
     sync()
@@ -62,6 +68,11 @@ export function useChessGame({ onEvents, botPlaysBlack }: Options) {
   }, [sync])
 
   const flip = useCallback(() => setOrientation((o) => (o === 'white' ? 'black' : 'white')), [])
+
+  // Show the human's side at the bottom when the bot side changes.
+  useEffect(() => {
+    if (botOn) setOrientation(bot.side === 'w' ? 'black' : 'white')
+  }, [botOn, bot.side])
 
   /** Click-to-move handling. */
   const clickSquare = useCallback(
@@ -79,13 +90,15 @@ export function useChessGame({ onEvents, botPlaysBlack }: Options) {
     [selected, tryMove],
   )
 
-  // Random-move bot for Black.
+  // Opponent bot.
   const turn = chessRef.current.turn()
   const gameOver = chessRef.current.isGameOver()
   useEffect(() => {
-    if (!botPlaysBlack || turn !== 'b' || gameOver) return
+    if (!botOn || turn !== bot.side || gameOver) return
+    let cancelled = false
     const delay = 350 + Math.random() * 500
-    const timer = setTimeout(() => {
+
+    const playRandom = () => {
       const moves = chessRef.current.moves({ verbose: true })
       if (!moves.length) return
       // Prefer captures/checks a little so the interesting sounds show up.
@@ -93,9 +106,43 @@ export function useChessGame({ onEvents, botPlaysBlack }: Options) {
       const pool = spicy.length && Math.random() < 0.5 ? spicy : moves
       const m = pool[Math.floor(Math.random() * pool.length)]
       tryMove(m.from, m.to)
-    }, delay)
-    return () => clearTimeout(timer)
-  }, [botPlaysBlack, turn, gameOver, fen, tryMove])
+    }
+
+    const playStockfish = async () => {
+      const startFen = chessRef.current.fen()
+      try {
+        stockfish.setSkill(bot.skill)
+        const m = await stockfish.bestMove(startFen, bot.moveTimeMs)
+        if (cancelled || !m || chessRef.current.fen() !== startFen) return
+        // Small pause so a fast engine reply still feels like an opponent.
+        setTimeout(() => {
+          if (!cancelled && chessRef.current.fen() === startFen) tryMove(m.from, m.to, m.promotion)
+        }, delay)
+      } catch (err) {
+        console.warn('[bot] engine failed, falling back to random', err)
+        if (!cancelled) playRandom()
+      }
+    }
+
+    let timer: number | undefined
+    if (bot.kind === 'stockfish') void playStockfish()
+    else timer = window.setTimeout(playRandom, delay)
+
+    return () => {
+      cancelled = true
+      if (timer) clearTimeout(timer)
+    }
+  }, [botOn, bot.kind, bot.side, bot.skill, bot.moveTimeMs, turn, gameOver, fen, tryMove])
+
+  // Warm up the engine as soon as Stockfish is selected.
+  useEffect(() => {
+    if (bot.kind === 'stockfish') stockfish.init().catch(() => undefined)
+  }, [bot.kind])
+
+  const engineStatus = useSyncExternalStore(
+    (cb) => stockfish.subscribe(cb),
+    () => stockfish.getStatus(),
+  )
 
   const legalTargets = useMemo(
     () => (selected ? chessRef.current.moves({ square: selected, verbose: true }).map((m) => m.to) : []),
@@ -128,6 +175,7 @@ export function useChessGame({ onEvents, botPlaysBlack }: Options) {
     status,
     turn,
     moveCount: history.length,
+    engineStatus,
     tryMove,
     clickSquare,
     undo,

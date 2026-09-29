@@ -48,7 +48,11 @@ function load(): SoundConfigState {
       activePresetId: presets.some((p) => p.id === parsed.activePresetId)
         ? (parsed.activePresetId as string)
         : presets[0].id,
-      global: { ...base.global, ...(parsed.global ?? {}) },
+      global: {
+        ...base.global,
+        ...(parsed.global ?? {}),
+        bot: { ...base.global.bot, ...(parsed.global?.bot ?? {}) },
+      },
     }
   } catch {
     return initialState()

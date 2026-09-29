@@ -18,13 +18,25 @@ export interface Preset {
 
 export type Layering = 'single' | 'stack'
 
+export type BotKind = 'off' | 'random' | 'stockfish'
+
+export interface BotSettings {
+  kind: BotKind
+  /** Which color the bot plays. */
+  side: 'w' | 'b'
+  /** Stockfish "Skill Level", 0 (weakest) .. 20 (full strength). */
+  skill: number
+  /** Stockfish thinking time per move. */
+  moveTimeMs: number
+}
+
 export interface GlobalSettings {
   masterVolume: number
   muted: boolean
   /** single = only the highest-priority event plays; stack = all matching events play. */
   layering: Layering
-  /** Let a random-move bot play Black so "opponent move" is a real event. */
-  botPlaysBlack: boolean
+  /** Opponent so "opponent move" is a real event: random mover or Stockfish. */
+  bot: BotSettings
   theme: 'dark' | 'light'
 }
 
@@ -61,6 +73,6 @@ export const DEFAULT_GLOBAL: GlobalSettings = {
   masterVolume: 0.9,
   muted: false,
   layering: 'single',
-  botPlaysBlack: false,
+  bot: { kind: 'off', side: 'b', skill: 5, moveTimeMs: 300 },
   theme: 'dark',
 }

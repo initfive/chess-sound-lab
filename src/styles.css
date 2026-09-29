@@ -751,3 +751,32 @@ input[type='range']::-moz-range-thumb {
     display: none;
   }
 }
+
+/* Opponent bar */
+.bot-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: -4px;
+}
+.bot-bar select {
+  height: 30px;
+  font-size: 13px;
+}
+.bot-skill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 170px;
+}
+.engine-status {
+  font-size: 12px;
+  color: var(--text-3);
+}
+.engine-thinking {
+  color: var(--accent-text);
+}
+.engine-error {
+  color: var(--danger);
+}
