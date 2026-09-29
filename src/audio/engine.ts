@@ -63,9 +63,15 @@ export class AudioEngine {
     await Promise.all(
       pending.map(async (s) => {
         try {
-          const res = await fetch(s.url)
-          if (!res.ok) throw new Error(`HTTP ${res.status}`)
-          const buf = await ctx.decodeAudioData(await res.arrayBuffer())
+          let bytes: ArrayBuffer
+          if (s.blob) {
+            bytes = await s.blob.arrayBuffer()
+          } else {
+            const res = await fetch(s.url)
+            if (!res.ok) throw new Error(`HTTP ${res.status}`)
+            bytes = await res.arrayBuffer()
+          }
+          const buf = await ctx.decodeAudioData(bytes)
           this.buffers.set(s.id, buf)
           this.status.set(s.id, 'ready')
         } catch (err) {
@@ -75,6 +81,13 @@ export class AudioEngine {
         this.notify()
       }),
     )
+  }
+
+  /** Drop a sample (e.g. a deleted upload). */
+  unload(sampleId: string) {
+    this.buffers.delete(sampleId)
+    this.status.delete(sampleId)
+    this.notify()
   }
 
   getBuffer(sampleId: string): AudioBuffer | undefined {

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { sampleById, samples } from './audio/library'
+import { library, useSamples } from './audio/library'
 import { useAudioEngine } from './audio/useAudioEngine'
 import { useChessGame, type EventPayload } from './chess/useChessGame'
 import { Board } from './components/Board'
@@ -16,7 +16,11 @@ import { useSoundConfig } from './sound/useSoundConfig'
 const timeNow = () => new Date().toLocaleTimeString([], { hour12: false, minute: '2-digit', second: '2-digit' })
 
 export default function App() {
+  const { samples, byId } = useSamples()
   const { engine, status } = useAudioEngine(samples)
+  useEffect(() => {
+    void library.loadUploads()
+  }, [])
   const { state, activePreset, dispatch, exportJson, importJson } = useSoundConfig()
   const [log, setLog] = useState<LogEntry[]>([])
   const [flashing, setFlashing] = useState<Set<EventId>>(new Set())
@@ -32,6 +36,8 @@ export default function App() {
   // Latest config in a ref so the chess hook's callback never goes stale.
   const configRef = useRef({ preset: activePreset, layering: state.global.layering })
   configRef.current = { preset: activePreset, layering: state.global.layering }
+  const byIdRef = useRef(byId)
+  byIdRef.current = byId
 
   const flash = useCallback((ids: EventId[]) => {
     setFlashing(new Set(ids))
@@ -48,7 +54,7 @@ export default function App() {
         const cfg = preset.events[id]
         if (!cfg.sampleId) continue
         engine.play(cfg.sampleId, { volume: cfg.volume, offsetMs: cfg.offsetMs })
-        played.push({ event: id, sampleName: sampleById.get(cfg.sampleId)?.name ?? cfg.sampleId })
+        played.push({ event: id, sampleName: byIdRef.current.get(cfg.sampleId)?.name ?? cfg.sampleId })
       }
       flash(toPlay)
       return { played, presetName: preset.name }

@@ -9,11 +9,12 @@ interface Props {
   status: LoadStatus | undefined
   usedBy: EventId[]
   onAssign: (eventId: EventId) => void
+  onRemove?: () => void
 }
 
 const fmt = (s: number) => (s >= 1 ? `${s.toFixed(2)} s` : `${Math.round(s * 1000)} ms`)
 
-export function SampleCard({ sample, status, usedBy, onAssign }: Props) {
+export function SampleCard({ sample, status, usedBy, onAssign, onRemove }: Props) {
   const [playStartedAt, setPlayStartedAt] = useState<number | null>(null)
   const buffer = audioEngine.getBuffer(sample.id)
 
@@ -30,6 +31,7 @@ export function SampleCard({ sample, status, usedBy, onAssign }: Props) {
         <div className="sample-title">
           <div className="sample-name" title={sample.file}>
             {sample.name}
+            {sample.uploaded && <span className="chip chip-dim sample-uploaded">uploaded</span>}
           </div>
           <div className="sample-meta muted-text">
             {status === 'ready' && buffer
@@ -39,6 +41,11 @@ export function SampleCard({ sample, status, usedBy, onAssign }: Props) {
                 : 'Loading…'}
           </div>
         </div>
+        {onRemove && (
+          <button className="btn btn-icon btn-small btn-ghost sample-remove" onClick={onRemove} title="Remove this upload" aria-label={`Remove ${sample.name}`}>
+            ×
+          </button>
+        )}
       </div>
       <Waveform buffer={buffer} playStartedAt={playStartedAt} />
       <div className="sample-bottom">

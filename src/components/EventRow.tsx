@@ -1,6 +1,6 @@
 import type { EventDef } from '../sound/events'
 import type { EventSoundConfig } from '../sound/presets'
-import { sampleById, sampleSets, samples, setLabel } from '../audio/library'
+import { setLabel, useSamples } from '../audio/library'
 import type { LoadStatus } from '../audio/types'
 
 interface Props {
@@ -13,7 +13,8 @@ interface Props {
 }
 
 export function EventRow({ def, config, status, flash, onChange, onPreview }: Props) {
-  const sample = config.sampleId ? sampleById.get(config.sampleId) : undefined
+  const { samples, byId, sets } = useSamples()
+  const sample = config.sampleId ? byId.get(config.sampleId) : undefined
   const missing = !!config.sampleId && !sample
   const loadState = config.sampleId ? status.get(config.sampleId) : undefined
 
@@ -37,7 +38,7 @@ export function EventRow({ def, config, status, flash, onChange, onPreview }: Pr
         >
           <option value="">— no sound —</option>
           {missing && <option value={config.sampleId!}>Missing: {config.sampleId}</option>}
-          {sampleSets.map((set) => (
+          {sets.map((set) => (
             <optgroup key={set || '_root'} label={setLabel(set)}>
               {samples
                 .filter((s) => s.set === set)

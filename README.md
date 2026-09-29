@@ -31,6 +31,14 @@ and appear in every event dropdown, grouped by folder, and in the Sample library
 The dev server reloads when files are added or removed. File names become labels
 (`move-soft.wav` → "Move soft").
 
+### Uploading in the browser
+
+The Sample library has an "Add sounds to set" box: pick files or drag audio
+files onto the panel. They are decoded immediately, stored in the browser
+(IndexedDB) so they survive reloads, and show up in every event dropdown under
+the set name you typed. Uploads live only in that browser; copy the files into
+`public/sounds/<set>/` and push to make them permanent for everyone.
+
 ## Events
 
 Move · White, Move · Black (so player 1 and player 2 can have different move
@@ -67,7 +75,8 @@ Shortcuts: Z undo · R reset · F flip · M mute · 1–9 preset · Space replay
 ```
 plugins/soundManifest.ts   scans public/sounds → virtual:sound-manifest
 src/audio/engine.ts        Web Audio preload + playback
-src/audio/library.ts       sample list helpers
+src/audio/library.ts       reactive sample list (manifest + uploads)
+src/audio/uploads.ts       IndexedDB storage for browser uploads
 src/sound/events.ts        event ids, labels, priority   ← add new events here
 src/sound/presets.ts       default mapping + preset types
 src/sound/useSoundConfig.ts  presets/settings state (localStorage)

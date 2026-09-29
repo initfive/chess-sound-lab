@@ -22,6 +22,8 @@ export function useChessGame({ onEvents, bot }: Options) {
   const [fen, setFen] = useState(() => chessRef.current.fen())
   const [orientation, setOrientation] = useState<'white' | 'black'>('white')
   const [selected, setSelected] = useState<Square | null>(null)
+  /** Bumped on reset/undo so the bot re-evaluates even when the FEN is unchanged (e.g. reset at move 0). */
+  const [epoch, setEpoch] = useState(0)
 
   const onEventsRef = useRef(onEvents)
   onEventsRef.current = onEvents
@@ -56,6 +58,7 @@ export function useChessGame({ onEvents, bot }: Options) {
     // With a bot on, undo its reply too so it's the human's turn again.
     if (botOn && chess.turn() === bot.side) chess.undo()
     setSelected(null)
+    setEpoch((e) => e + 1)
     sync()
   }, [botOn, bot.side, sync])
 
@@ -63,6 +66,7 @@ export function useChessGame({ onEvents, bot }: Options) {
     stockfish.cancel()
     chessRef.current.reset()
     setSelected(null)
+    setEpoch((e) => e + 1)
     sync()
     onEventsRef.current({ events: ['gameStart'] })
   }, [sync])
@@ -111,8 +115,7 @@ export function useChessGame({ onEvents, bot }: Options) {
     const playStockfish = async () => {
       const startFen = chessRef.current.fen()
       try {
-        stockfish.setSkill(bot.skill)
-        const m = await stockfish.bestMove(startFen, bot.moveTimeMs)
+        const m = await stockfish.bestMove(startFen, bot.moveTimeMs, bot.skill)
         if (cancelled || !m || chessRef.current.fen() !== startFen) return
         // Small pause so a fast engine reply still feels like an opponent.
         setTimeout(() => {
@@ -132,7 +135,7 @@ export function useChessGame({ onEvents, bot }: Options) {
       cancelled = true
       if (timer) clearTimeout(timer)
     }
-  }, [botOn, bot.kind, bot.side, bot.skill, bot.moveTimeMs, turn, gameOver, fen, tryMove])
+  }, [botOn, bot.kind, bot.side, bot.skill, bot.moveTimeMs, turn, gameOver, fen, epoch, tryMove])
 
   // Warm up the engine as soon as Stockfish is selected.
   useEffect(() => {

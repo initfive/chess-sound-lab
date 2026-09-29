@@ -780,3 +780,52 @@ input[type='range']::-moz-range-thumb {
 .engine-error {
   color: var(--danger);
 }
+
+/* Uploads */
+.library {
+  position: relative;
+}
+.upload-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 10px 12px;
+  margin-bottom: 14px;
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-sm);
+}
+.upload-set {
+  width: 140px;
+}
+.upload-hint {
+  margin: 0;
+  flex: 1 1 260px;
+}
+.library-dragging {
+  border-color: var(--accent-text);
+}
+.drop-overlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius);
+  background: var(--accent-bg);
+  color: var(--accent-soft);
+  font-weight: 600;
+  font-size: 16px;
+  pointer-events: none;
+}
+.sample-uploaded {
+  margin-left: 6px;
+  vertical-align: middle;
+}
+.sample-remove {
+  margin-left: auto;
+  color: var(--text-3);
+  font-size: 16px;
+}
+.sample-remove:hover:not(:disabled) {
+  color: var(--danger);
+}
