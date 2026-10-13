@@ -1,6 +1,6 @@
 /**
- * Chess events the lab can react to. Order = priority (first wins in
- * "single" layering mode). Add a new event here + a default in presets.ts.
+ * Chess events the lab can react to. Order = priority (the first matching
+ * event plays). Add a new event here + a default in presets.ts.
  */
 export type EventId =
   | 'checkmate'
@@ -17,7 +17,7 @@ export interface EventDef {
   id: EventId
   label: string
   hint: string
-  /** Events in the same group compete in "single" layering mode. */
+  /** Events in the same group compete for the one sound a move plays. */
   group: 'move' | 'standalone'
 }
 

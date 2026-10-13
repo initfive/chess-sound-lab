@@ -5,7 +5,6 @@ import { useChessGame, type EventPayload } from './chess/useChessGame'
 import { Board } from './components/Board'
 import { EventLog, type LogEntry } from './components/EventLog'
 import { EventPanel } from './components/EventPanel'
-import { GlobalControls } from './components/GlobalControls'
 import { PresetBar } from './components/PresetBar'
 import { SampleLibrary } from './components/SampleLibrary'
 import { Toolbar } from './components/Toolbar'
@@ -28,15 +27,14 @@ export default function App() {
   const logId = useRef(0)
 
   // Keep engine + document in sync with global settings.
-  useEffect(() => engine.setMasterVolume(state.global.masterVolume), [engine, state.global.masterVolume])
   useEffect(() => engine.setMuted(state.global.muted), [engine, state.global.muted])
   useEffect(() => {
     document.documentElement.dataset.theme = state.global.theme
   }, [state.global.theme])
 
   // Latest config in a ref so the chess hook's callback never goes stale.
-  const configRef = useRef({ preset: activePreset, layering: state.global.layering })
-  configRef.current = { preset: activePreset, layering: state.global.layering }
+  const configRef = useRef({ preset: activePreset })
+  configRef.current = { preset: activePreset }
   const byIdRef = useRef(byId)
   byIdRef.current = byId
 
@@ -48,8 +46,8 @@ export default function App() {
   /** Plays the sounds for a set of detected events using the active preset. */
   const playEvents = useCallback(
     (detected: EventId[]) => {
-      const { preset, layering } = configRef.current
-      const toPlay = selectEventsToPlay(detected, preset.events, layering)
+      const { preset } = configRef.current
+      const toPlay = selectEventsToPlay(detected, preset.events)
       const played: LogEntry['played'] = []
       for (const id of toPlay) {
         const cfg = preset.events[id]
@@ -172,7 +170,6 @@ export default function App() {
         </section>
 
         <aside className="panel-col">
-          <GlobalControls settings={state.global} onChange={(patch) => dispatch({ type: 'updateGlobal', patch })} />
           <EventPanel
             presetName={activePreset.name}
             events={activePreset.events}

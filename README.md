@@ -55,9 +55,8 @@ JSON from the ⋯ menu). Presets and settings persist in localStorage.
 Switch presets with keys 1–9 and press Space to replay the last event with the
 current preset for a quick A/B on the exact same moment.
 
-Layering (Global): *Single* plays only the highest-priority event of a move
-(checkmate → check → promotion → castle → capture → move); *Stack* plays every
-matching event so you can layer sounds using the offsets.
+Each move plays one sound: the highest-priority event that has a sample
+(checkmate → check → promotion → castle → capture → move).
 
 ## Opponent
 

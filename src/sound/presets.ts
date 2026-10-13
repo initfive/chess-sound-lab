@@ -16,8 +16,6 @@ export interface Preset {
   events: EventConfigMap
 }
 
-export type Layering = 'single' | 'stack'
-
 export type BotKind = 'off' | 'random' | 'stockfish'
 
 export interface BotSettings {
@@ -31,10 +29,7 @@ export interface BotSettings {
 }
 
 export interface GlobalSettings {
-  masterVolume: number
   muted: boolean
-  /** single = only the highest-priority event plays; stack = all matching events play. */
-  layering: Layering
   /** Opponent so "opponent move" is a real event: random mover or Stockfish. */
   bot: BotSettings
   theme: 'dark' | 'light'
@@ -70,9 +65,7 @@ export const DEFAULT_PRESETS: Preset[] = [
 ]
 
 export const DEFAULT_GLOBAL: GlobalSettings = {
-  masterVolume: 0.9,
   muted: false,
-  layering: 'single',
   bot: { kind: 'stockfish', side: 'b', skill: 5, moveTimeMs: 300 },
   theme: 'dark',
 }
