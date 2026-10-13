@@ -50,7 +50,7 @@ export function Toolbar({ status, moveCount, muted, bot, engineStatus, onUndo, o
       <div className="bot-bar">
         <span className="field-label">Opponent</span>
         <select value={bot.kind} onChange={(e) => onBotChange({ kind: e.target.value as BotSettings['kind'] })}>
-          <option value="off">Off · you play both sides</option>
+          <option value="off">Off · both sides</option>
           <option value="random">Random mover</option>
           <option value="stockfish">Stockfish 19</option>
         </select>
