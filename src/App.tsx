@@ -123,19 +123,19 @@ export default function App() {
           <span className="brand-lab" aria-hidden="true">Sound<br />Lab</span>
           <span className="sr-only">Take Take Take Sound Lab</span>
         </div>
-        <PresetBar
-          presets={state.presets}
-          activeId={state.activePresetId}
-          onSelect={(id) => dispatch({ type: 'selectPreset', id })}
-          onRename={(id, name) => dispatch({ type: 'renamePreset', id, name })}
-          onAdd={() => dispatch({ type: 'addPreset' })}
-          onDuplicate={(id) => dispatch({ type: 'duplicatePreset', id })}
-          onDelete={(id) => dispatch({ type: 'deletePreset', id })}
-          onReset={(id) => dispatch({ type: 'resetPreset', id })}
-          onExport={exportJson}
-          onImport={importJson}
-        />
         <div className="topbar-right">
+          <PresetBar
+            presets={state.presets}
+            activeId={state.activePresetId}
+            onSelect={(id) => dispatch({ type: 'selectPreset', id })}
+            onRename={(id, name) => dispatch({ type: 'renamePreset', id, name })}
+            onAdd={() => dispatch({ type: 'addPreset' })}
+            onDuplicate={(id) => dispatch({ type: 'duplicatePreset', id })}
+            onDelete={(id) => dispatch({ type: 'deletePreset', id })}
+            onReset={(id) => dispatch({ type: 'resetPreset', id })}
+            onExport={exportJson}
+            onImport={importJson}
+          />
           <button
             className="btn btn-icon"
             onClick={() => dispatch({ type: 'updateGlobal', patch: { theme: state.global.theme === 'dark' ? 'light' : 'dark' } })}
