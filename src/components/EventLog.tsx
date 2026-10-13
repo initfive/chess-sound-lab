@@ -49,7 +49,10 @@ export function EventLog({ entries, onReplay, onClear }: Props) {
                 {e.played.length ? e.played.map((p) => p.sampleName).join(' + ') : 'silent'} · {e.presetName}
               </span>
               <button className="btn btn-icon btn-small" onClick={() => onReplay(e)} title="Replay with current preset" aria-label="Replay">
-                ↻
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M20 12a8 8 0 1 1-2.34-5.66" />
+                  <path d="M20 4v5h-5" />
+                </svg>
               </button>
             </li>
           ))}

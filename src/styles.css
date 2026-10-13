@@ -217,6 +217,10 @@ kbd {
   padding: 0;
   display: inline-grid;
   place-items: center;
+  line-height: 0;
+}
+.btn-icon svg {
+  display: block;
 }
 .btn-small {
   height: 28px;
@@ -507,7 +511,7 @@ input[type='range']::-moz-range-thumb {
 .event-head,
 .event-row {
   display: grid;
-  grid-template-columns: 34px minmax(120px, 1fr) minmax(170px, 1.4fr) minmax(100px, 0.9fr) 92px;
+  grid-template-columns: 34px minmax(0, 1fr) minmax(0, 1.3fr) minmax(64px, 0.8fr) auto;
   gap: 12px;
   align-items: center;
 }
@@ -525,7 +529,6 @@ input[type='range']::-moz-range-thumb {
 .event-row {
   padding: 9px 0;
   border-top: 1px solid var(--border);
-  border-radius: 6px;
   transition: background 0.25s;
 }
 .event-row-off .event-name,
@@ -561,7 +564,10 @@ input[type='range']::-moz-range-thumb {
 .event-offset {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
+}
+.event-offset input[type='number'] {
+  width: 52px;
 }
 
 /* Chips */

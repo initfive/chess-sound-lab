@@ -36,7 +36,7 @@ export function EventRow({ def, config, status, flash, onChange, onPreview }: Pr
           onChange={(e) => onChange({ sampleId: e.target.value || null })}
           className={missing ? 'select-error' : ''}
         >
-          <option value="">— no sound —</option>
+          <option value="">No sound</option>
           {missing && <option value={config.sampleId!}>Missing: {config.sampleId}</option>}
           {sets.map((set) => (
             <optgroup key={set || '_root'} label={setLabel(set)}>
@@ -57,7 +57,9 @@ export function EventRow({ def, config, status, flash, onChange, onPreview }: Pr
           title={loadState === 'loading' ? 'Loading…' : 'Preview'}
           aria-label={`Preview ${def.label}`}
         >
-          ▶
+          <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true" style={{ marginLeft: 2 }}>
+            <path d="M2.5 1.5v9l8-4.5z" fill="currentColor" />
+          </svg>
         </button>
       </div>
 
