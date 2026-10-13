@@ -575,6 +575,27 @@ input[type='range']::-moz-range-thumb {
   border-top: 1px solid var(--border);
   transition: background 0.25s;
 }
+/* Two lines per row: controls and event name share one 32px line; hint and pack sit on the line below. */
+.event-row {
+  align-items: start;
+}
+.event-row > .switch {
+  margin-top: 6px;
+}
+.event-row .event-label {
+  line-height: 32px;
+}
+.event-row .event-hint {
+  margin-top: 2px;
+}
+.event-row .btn-play {
+  width: 32px;
+  height: 32px;
+}
+.event-row .event-volume,
+.event-row .event-offset {
+  height: 32px;
+}
 .event-row-off .event-name,
 .event-row-off .event-sample,
 .event-row-off .event-volume,
