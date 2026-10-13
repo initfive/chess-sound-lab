@@ -39,7 +39,6 @@ export function EventPanel({ presetName, events, status, flashing, onChange, onP
           />
         ))}
       </div>
-      <p className="hint">One sound per move: the highest-priority event plays (checkmate → check → promotion → castle → capture → move).</p>
     </div>
   )
 }

@@ -23,14 +23,14 @@ export interface EventDef {
 
 export const EVENTS: EventDef[] = [
   { id: 'moveWhite', label: 'Move · White', hint: 'Player 1 quiet move', group: 'move' },
-  { id: 'moveBlack', label: 'Move · Black', hint: 'Player 2 / opponent quiet move', group: 'move' },
-  { id: 'capture', label: 'Capture', hint: 'Any capture incl. en passant', group: 'move' },
+  { id: 'moveBlack', label: 'Move · Black', hint: 'Opponent quiet move', group: 'move' },
+  { id: 'capture', label: 'Capture', hint: 'Incl. en passant', group: 'move' },
   { id: 'castle', label: 'Castle', hint: 'King- or queen-side', group: 'move' },
-  { id: 'promotion', label: 'Promotion', hint: 'Pawn reaches last rank', group: 'move' },
+  { id: 'promotion', label: 'Promotion', hint: 'Pawn on last rank', group: 'move' },
   { id: 'check', label: 'Check', hint: 'Move gives check', group: 'move' },
   { id: 'checkmate', label: 'Checkmate', hint: 'Game ends by mate', group: 'move' },
-  { id: 'illegal', label: 'Illegal move', hint: 'Piece dropped on an illegal square', group: 'standalone' },
-  { id: 'gameStart', label: 'Game start', hint: 'Played on Reset Game', group: 'standalone' },
+  { id: 'illegal', label: 'Illegal move', hint: 'Dropped on a wrong square', group: 'standalone' },
+  { id: 'gameStart', label: 'Game start', hint: 'On game reset', group: 'standalone' },
 ]
 
 export const EVENT_PRIORITY: EventId[] = [

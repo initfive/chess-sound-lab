@@ -123,22 +123,6 @@ export default function App() {
           <span className="brand-lab" aria-hidden="true">Sound<br />Lab</span>
           <span className="sr-only">Take Take Take Sound Lab</span>
         </div>
-        <div className="topbar-right">
-          <PresetBar
-            presets={state.presets}
-            activeId={state.activePresetId}
-            onSelect={(id) => dispatch({ type: 'selectPreset', id })}
-            onRename={(id, name) => dispatch({ type: 'renamePreset', id, name })}
-            onAdd={() => dispatch({ type: 'addPreset' })}
-            onDuplicate={(id) => dispatch({ type: 'duplicatePreset', id })}
-            onDelete={(id) => dispatch({ type: 'deletePreset', id })}
-            onReset={(id) => dispatch({ type: 'resetPreset', id })}
-            onExport={exportJson}
-            onImport={importJson}
-            theme={state.global.theme}
-            onToggleTheme={() => dispatch({ type: 'updateGlobal', patch: { theme: state.global.theme === 'dark' ? 'light' : 'dark' } })}
-          />
-        </div>
       </header>
 
       <main className="layout">
@@ -172,16 +156,34 @@ export default function App() {
         </section>
 
         <aside className="panel-col">
-          <EventPanel
-            presetName={activePreset.name}
-            events={activePreset.events}
-            status={status}
-            flashing={flashing}
-            onChange={(eventId, patch) => dispatch({ type: 'updateEvent', eventId, patch })}
-            onPreview={preview}
-          />
+          <div className="panel-main">
+            <PresetBar
+              presets={state.presets}
+              activeId={state.activePresetId}
+              onSelect={(id) => dispatch({ type: 'selectPreset', id })}
+              onRename={(id, name) => dispatch({ type: 'renamePreset', id, name })}
+              onAdd={() => dispatch({ type: 'addPreset' })}
+              onDuplicate={(id) => dispatch({ type: 'duplicatePreset', id })}
+              onDelete={(id) => dispatch({ type: 'deletePreset', id })}
+              onReset={(id) => dispatch({ type: 'resetPreset', id })}
+              onExport={exportJson}
+              onImport={importJson}
+              theme={state.global.theme}
+              onToggleTheme={() => dispatch({ type: 'updateGlobal', patch: { theme: state.global.theme === 'dark' ? 'light' : 'dark' } })}
+            />
+            <EventPanel
+              presetName={activePreset.name}
+              events={activePreset.events}
+              status={status}
+              flashing={flashing}
+              onChange={(eventId, patch) => dispatch({ type: 'updateEvent', eventId, patch })}
+              onPreview={preview}
+            />
+          </div>
           <p className="hint shortcuts">
             <kbd>Z</kbd> undo · <kbd>R</kbd> reset · <kbd>F</kbd> flip · <kbd>M</kbd> mute · <kbd>1–9</kbd> sound set · <kbd>Space</kbd> replay last
+            <br />
+            One sound per move: checkmate → check → promotion → castle → capture → move.
           </p>
         </aside>
       </main>
