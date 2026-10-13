@@ -1,4 +1,4 @@
-/* Tokens lifted from Take Take Take's theme: neutral scale, signal purple accent, muted-purple board. */
+/* Tokens lifted from Take Take Take's theme: neutral scale, signal purple accent, "Royal" board (their default). */
 :root {
   --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --radius: 14px;
@@ -23,11 +23,11 @@
   --good: #51bf7f;
   --wave: #8178ff;
 
-  --board-light: #b0a5cb;
-  --board-dark: #8472ac;
-  --board-move: rgba(159, 144, 255, 0.85);
-  --board-selected: rgba(187, 177, 255, 0.95);
-  --board-dot: rgba(34, 27, 61, 0.35);
+  --board-light: #adafe0;
+  --board-dark: #5c44d9;
+  --board-move: rgba(233, 128, 241, 0.85);
+  --board-selected: rgba(231, 151, 237, 0.95);
+  --board-dot: rgba(22, 10, 56, 0.35);
   --board-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
 }
 
@@ -49,11 +49,11 @@
   --error: #ff765b;
   --wave: #6741ff;
 
-  --board-light: #d2cce7;
-  --board-dark: #ada1c9;
-  --board-move: rgba(179, 167, 255, 0.9);
-  --board-selected: rgba(195, 186, 255, 1);
-  --board-dot: rgba(65, 52, 96, 0.3);
+  --board-light: #d8daff;
+  --board-dark: #735fff;
+  --board-move: rgba(247, 141, 255, 0.9);
+  --board-selected: rgba(245, 164, 251, 1);
+  --board-dot: rgba(34, 0, 105, 0.3);
   --board-shadow: 0 16px 40px rgba(65, 52, 96, 0.2);
 }
 
@@ -130,21 +130,31 @@ kbd {
 .brand {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   font-weight: 600;
   white-space: nowrap;
 }
-.brand-mark {
-  width: 22px;
-  height: 22px;
-  border-radius: 6px;
-  background:
-    linear-gradient(90deg, var(--board-light) 50%, var(--board-dark) 50%) top / 100% 50% no-repeat,
-    linear-gradient(90deg, var(--board-dark) 50%, var(--board-light) 50%) bottom / 100% 50% no-repeat;
+.ttt-logo {
+  display: block;
+  color: var(--text);
 }
-.brand-sub {
-  color: var(--text-3);
-  font-weight: 500;
+/* Heavy italic caps, stacked like the wordmark lines. */
+.brand-lab {
+  color: var(--accent-text);
+  font-size: 15px;
+  font-style: italic;
+  font-weight: 800;
+  line-height: 15px;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
 }
 
 .layout {

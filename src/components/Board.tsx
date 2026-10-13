@@ -14,7 +14,7 @@ interface Props {
   onSquareClick: (square: Square) => void
 }
 
-/** Board colors mirror Take Take Take's "Original" theme (dark + light variants via CSS vars). */
+/** Board colors mirror Take Take Take's "Royal" theme (their default board) (dark + light variants via CSS vars). */
 export function Board({ fen, orientation, selected, legalTargets, lastMove, kingInCheck, turn, onDrop, onSquareClick }: Props) {
   const squareStyles: Record<string, CSSProperties> = {}
   if (lastMove) {

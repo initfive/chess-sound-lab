@@ -1,7 +1,7 @@
 # Chess Sound Lab
 
 Interaction prototype for testing sound design for the Take Take Take chess app.
-Play chess on a board styled after their "Original" purple theme, and swap, tune
+Play chess on a board styled after their default "Royal" theme, and swap, tune
 and A/B compare the sounds each chess event triggers. Everything runs client-side.
 
 ## Run
