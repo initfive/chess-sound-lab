@@ -22,7 +22,7 @@ export function PresetBar({ presets, activeId, onSelect, onRename, onAdd, onDupl
 
   const rename = () => {
     const current = presets.find((p) => p.id === activeId)
-    const name = window.prompt('Preset name', current?.name ?? '')
+    const name = window.prompt('Sound set name', current?.name ?? '')
     if (name?.trim()) onRename(activeId, name.trim())
     setMenuOpen(false)
   }
@@ -49,7 +49,7 @@ export function PresetBar({ presets, activeId, onSelect, onRename, onAdd, onDupl
 
   return (
     <div className="preset-bar">
-      <div className="segmented" role="tablist" aria-label="Sound set presets">
+      <div className="segmented" role="tablist" aria-label="Sound sets">
         {presets.map((p, i) => (
           <button
             key={p.id}
@@ -57,7 +57,7 @@ export function PresetBar({ presets, activeId, onSelect, onRename, onAdd, onDupl
             aria-selected={p.id === activeId}
             className={`segment ${p.id === activeId ? 'segment-active' : ''}`}
             onClick={() => onSelect(p.id)}
-            title={`Switch preset (${i + 1})`}
+            title={`Switch sound set (${i + 1})`}
           >
             <kbd>{i + 1}</kbd>
             {p.name}
@@ -71,7 +71,7 @@ export function PresetBar({ presets, activeId, onSelect, onRename, onAdd, onDupl
         {menuOpen && (
           <div className="menu" onMouseLeave={() => setMenuOpen(false)}>
             <button onClick={rename}>Rename</button>
-            <button onClick={() => { onAdd(); setMenuOpen(false) }}>New preset</button>
+            <button onClick={() => { onAdd(); setMenuOpen(false) }}>New sound set</button>
             <button onClick={() => { onDuplicate(activeId); setMenuOpen(false) }}>Duplicate</button>
             <button onClick={() => { onReset(activeId); setMenuOpen(false) }}>Reset to Original sounds</button>
             <button disabled={presets.length <= 1} onClick={() => { onDelete(activeId); setMenuOpen(false) }}>

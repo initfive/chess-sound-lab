@@ -9,12 +9,13 @@ import { SampleCard } from './SampleCard'
 interface Props {
   status: ReadonlyMap<string, LoadStatus>
   events: EventConfigMap
+  presetName: string
   onAssign: (sampleId: string, eventId: EventId) => void
 }
 
 const AUDIO_RE = /\.(wav|mp3|ogg|m4a|aac|flac|webm)$/i
 
-export function SampleLibrary({ status, events, onAssign }: Props) {
+export function SampleLibrary({ status, events, presetName, onAssign }: Props) {
   const { samples, sets } = useSamples()
   const [filter, setFilter] = useState<string>('all')
   const [query, setQuery] = useState('')
@@ -77,7 +78,7 @@ export function SampleLibrary({ status, events, onAssign }: Props) {
         <div className="card-actions">
           <input className="input-small" placeholder="Search…" value={query} onChange={(e) => setQuery(e.target.value)} />
           <select className="select-small" value={filter} onChange={(e) => setFilter(e.target.value)}>
-            <option value="all">All sets</option>
+            <option value="all">All packs</option>
             {sets.map((set) => (
               <option key={set || '_root'} value={set}>
                 {setLabel(set)}
@@ -88,12 +89,12 @@ export function SampleLibrary({ status, events, onAssign }: Props) {
       </div>
 
       <div className="upload-bar">
-        <span className="field-label">Add sounds to set</span>
+        <span className="field-label">Add sounds to pack</span>
         <input
           className="input-small upload-set"
           value={uploadSet}
           onChange={(e) => setUploadSet(e.target.value)}
-          placeholder="set name"
+          placeholder="pack name"
           list="sample-sets"
         />
         <datalist id="sample-sets">
@@ -131,6 +132,7 @@ export function SampleLibrary({ status, events, onAssign }: Props) {
               sample={s}
               status={status.get(s.id)}
               usedBy={usage.get(s.id) ?? []}
+              presetName={presetName}
               onAssign={(eventId) => onAssign(s.id, eventId)}
               onRemove={s.uploaded ? () => void remove(s.id) : undefined}
             />

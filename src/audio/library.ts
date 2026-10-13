@@ -60,6 +60,11 @@ export function useSamples() {
   return { samples, byId, sets }
 }
 
+/** Sample name with its pack, e.g. "Original / Move", so same-named files stay distinguishable. */
+export function sampleLabel(sample: { name: string; set: string }): string {
+  return sample.set ? `${setLabel(sample.set)} / ${sample.name}` : sample.name
+}
+
 export function setLabel(set: string): string {
   if (!set) return 'Uncategorized'
   const spaced = set.replace(/[-_/]+/g, ' ')

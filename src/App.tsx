@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { library, useSamples } from './audio/library'
+import { library, sampleLabel, useSamples } from './audio/library'
 import { useAudioEngine } from './audio/useAudioEngine'
 import { useChessGame, type EventPayload } from './chess/useChessGame'
 import { Board } from './components/Board'
@@ -33,8 +33,8 @@ export default function App() {
   }, [state.global.theme])
 
   // Latest config in a ref so the chess hook's callback never goes stale.
-  const configRef = useRef({ preset: activePreset })
-  configRef.current = { preset: activePreset }
+  const configRef = useRef({ preset: activePreset, presets: state.presets })
+  configRef.current = { preset: activePreset, presets: state.presets }
   const byIdRef = useRef(byId)
   byIdRef.current = byId
 
@@ -43,29 +43,31 @@ export default function App() {
     window.setTimeout(() => setFlashing(new Set()), 350)
   }, [])
 
-  /** Plays the sounds for a set of detected events using the active preset. */
+  /** Plays the sounds for a set of detected events with the given sound set (default: the active one). */
   const playEvents = useCallback(
-    (detected: EventId[]) => {
-      const { preset } = configRef.current
+    (detected: EventId[], presetId?: string) => {
+      const { preset: active, presets } = configRef.current
+      const preset = (presetId && presets.find((p) => p.id === presetId)) || active
       const toPlay = selectEventsToPlay(detected, preset.events)
       const played: LogEntry['played'] = []
       for (const id of toPlay) {
         const cfg = preset.events[id]
         if (!cfg.sampleId) continue
         engine.play(cfg.sampleId, { volume: cfg.volume, offsetMs: cfg.offsetMs })
-        played.push({ event: id, sampleName: byIdRef.current.get(cfg.sampleId)?.name ?? cfg.sampleId })
+        const sample = byIdRef.current.get(cfg.sampleId)
+        played.push({ event: id, sampleName: sample ? sampleLabel(sample) : cfg.sampleId })
       }
       flash(toPlay)
-      return { played, presetName: preset.name }
+      return { played, presetId: preset.id, presetName: preset.name }
     },
     [engine, flash],
   )
 
   const handleEvents = useCallback(
     ({ events, san }: EventPayload) => {
-      const { played, presetName } = playEvents(events)
+      const { played, presetId, presetName } = playEvents(events)
       setLog((l) =>
-        [{ id: ++logId.current, time: timeNow(), san: san ?? null, detected: events, played, presetName }, ...l].slice(0, 30),
+        [{ id: ++logId.current, time: timeNow(), san: san ?? null, detected: events, played, presetId, presetName }, ...l].slice(0, 30),
       )
     },
     [playEvents],
@@ -74,9 +76,9 @@ export default function App() {
   const game = useChessGame({ onEvents: handleEvents, bot: state.global.bot })
 
   const replay = useCallback(
-    (entry: LogEntry) => {
-      const { played, presetName } = playEvents(entry.detected)
-      setLog((l) => [{ ...entry, id: ++logId.current, time: timeNow(), played, presetName }, ...l].slice(0, 30))
+    (entry: LogEntry, presetId?: string) => {
+      const { played, presetId: usedId, presetName } = playEvents(entry.detected, presetId)
+      setLog((l) => [{ ...entry, id: ++logId.current, time: timeNow(), played, presetId: usedId, presetName }, ...l].slice(0, 30))
     },
     [playEvents],
   )
@@ -166,7 +168,7 @@ export default function App() {
             onToggleMute={() => dispatch({ type: 'updateGlobal', patch: { muted: !state.global.muted } })}
             onBotChange={(patch) => dispatch({ type: 'updateGlobal', patch: { bot: { ...state.global.bot, ...patch } } })}
           />
-          <EventLog entries={log} onReplay={replay} onClear={() => setLog([])} />
+          <EventLog entries={log} presets={state.presets} onReplay={replay} onClear={() => setLog([])} />
         </section>
 
         <aside className="panel-col">
@@ -179,7 +181,7 @@ export default function App() {
             onPreview={preview}
           />
           <p className="hint shortcuts">
-            <kbd>Z</kbd> undo · <kbd>R</kbd> reset · <kbd>F</kbd> flip · <kbd>M</kbd> mute · <kbd>1–9</kbd> preset · <kbd>Space</kbd> replay last
+            <kbd>Z</kbd> undo · <kbd>R</kbd> reset · <kbd>F</kbd> flip · <kbd>M</kbd> mute · <kbd>1–9</kbd> sound set · <kbd>Space</kbd> replay last
           </p>
         </aside>
       </main>
@@ -187,6 +189,7 @@ export default function App() {
       <SampleLibrary
         status={status}
         events={activePreset.events}
+        presetName={activePreset.name}
         onAssign={(sampleId, eventId) => dispatch({ type: 'updateEvent', eventId, patch: { sampleId } })}
       />
     </div>

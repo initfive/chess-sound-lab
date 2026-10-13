@@ -8,13 +8,14 @@ interface Props {
   sample: SampleMeta
   status: LoadStatus | undefined
   usedBy: EventId[]
+  presetName: string
   onAssign: (eventId: EventId) => void
   onRemove?: () => void
 }
 
 const fmt = (s: number) => (s >= 1 ? `${s.toFixed(2)} s` : `${Math.round(s * 1000)} ms`)
 
-export function SampleCard({ sample, status, usedBy, onAssign, onRemove }: Props) {
+export function SampleCard({ sample, status, usedBy, presetName, onAssign, onRemove }: Props) {
   const [playStartedAt, setPlayStartedAt] = useState<number | null>(null)
   const buffer = audioEngine.getBuffer(sample.id)
 
@@ -56,8 +57,8 @@ export function SampleCard({ sample, status, usedBy, onAssign, onRemove }: Props
             </span>
           ))}
         </div>
-        <select className="select-small" value="" onChange={(e) => e.target.value && onAssign(e.target.value as EventId)} title="Assign this sample to an event in the active preset">
-          <option value="">Assign to…</option>
+        <select className="select-small" value="" onChange={(e) => e.target.value && onAssign(e.target.value as EventId)} title={`Assign this sample to an event in ${presetName}`}>
+          <option value="">Assign in {presetName} to…</option>
           {EVENTS.map((e) => (
             <option key={e.id} value={e.id}>
               {e.label}
