@@ -15,10 +15,7 @@ interface Props {
 export function EventPanel({ presetName, events, status, flashing, onChange, onPreview }: Props) {
   return (
     <div className="card">
-      <div className="card-header">
-        <h2>Events</h2>
-        <span className="chip chip-accent">{presetName}</span>
-      </div>
+      <h2 className="sr-only">Events in {presetName}</h2>
       <div className="event-head">
         <span />
         <span>Event</span>
