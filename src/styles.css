@@ -4,21 +4,22 @@
   --radius: 14px;
   --radius-sm: 9px;
 
-  --bg: #191919;
+  --bg: #111111;
   --surface: #222222;
   --surface-2: #2a2a2a;
-  --surface-3: #333333;
+  --surface-3: #313131;
   --border: #333333;
-  --border-strong: #474747;
+  --border-strong: #5c5c5c;
   --text: #ffffff;
   --text-2: #c4c4c4;
   --text-3: #999999;
-  --accent: #5e00ff;
-  --accent-hover: #6741ff;
+  --accent: #6741ff;
+  --accent-hover: #735fff;
   --accent-soft: #b3b5ff;
   --accent-text: #8178ff;
   --accent-bg: rgba(94, 0, 255, 0.18);
   --danger: #ed5030;
+  --error: #ff937f;
   --good: #51bf7f;
   --wave: #8178ff;
 
@@ -31,12 +32,12 @@
 }
 
 :root[data-theme='light'] {
-  --bg: #efefef;
+  --bg: #e4e4e4;
   --surface: #ffffff;
-  --surface-2: #f9f9f9;
+  --surface-2: #f7f7f7;
   --surface-3: #ebebeb;
-  --border: #ebebeb;
-  --border-strong: #d6d6d6;
+  --border: #d6d6d6;
+  --border-strong: #c4c4c4;
   --text: #333333;
   --text-2: #5c5c5c;
   --text-3: #7a7a7a;
@@ -45,6 +46,7 @@
   --accent-soft: #c5c8ff;
   --accent-text: #5e00ff;
   --accent-bg: rgba(94, 0, 255, 0.1);
+  --error: #ff765b;
   --wave: #6741ff;
 
   --board-light: #d2cce7;
@@ -388,7 +390,7 @@ input:focus {
   font-size: 12px;
 }
 .select-error {
-  border-color: var(--danger);
+  border-color: var(--error);
 }
 input[type='number'] {
   height: 32px;
@@ -778,7 +780,7 @@ input[type='range']::-moz-range-thumb {
   color: var(--accent-text);
 }
 .engine-error {
-  color: var(--danger);
+  color: var(--error);
 }
 
 /* Uploads */
