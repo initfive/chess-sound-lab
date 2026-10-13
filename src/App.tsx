@@ -135,15 +135,9 @@ export default function App() {
             onReset={(id) => dispatch({ type: 'resetPreset', id })}
             onExport={exportJson}
             onImport={importJson}
+            theme={state.global.theme}
+            onToggleTheme={() => dispatch({ type: 'updateGlobal', patch: { theme: state.global.theme === 'dark' ? 'light' : 'dark' } })}
           />
-          <button
-            className="btn btn-icon"
-            onClick={() => dispatch({ type: 'updateGlobal', patch: { theme: state.global.theme === 'dark' ? 'light' : 'dark' } })}
-            title="Toggle theme"
-            aria-label="Toggle theme"
-          >
-            {state.global.theme === 'dark' ? '☾' : '☀'}
-          </button>
         </div>
       </header>
 

@@ -12,9 +12,11 @@ interface Props {
   onReset: (id: string) => void
   onExport: () => string
   onImport: (json: string) => void
+  theme: 'dark' | 'light'
+  onToggleTheme: () => void
 }
 
-export function PresetBar({ presets, activeId, onSelect, onRename, onAdd, onDuplicate, onDelete, onReset, onExport, onImport }: Props) {
+export function PresetBar({ presets, activeId, onSelect, onRename, onAdd, onDuplicate, onDelete, onReset, onExport, onImport, theme, onToggleTheme }: Props) {
   const [menuOpen, setMenuOpen] = useState(false)
   const fileRef = useRef<HTMLInputElement>(null)
 
@@ -63,7 +65,7 @@ export function PresetBar({ presets, activeId, onSelect, onRename, onAdd, onDupl
         ))}
       </div>
       <div className="preset-menu-wrap">
-        <button className="btn btn-icon" onClick={() => setMenuOpen((o) => !o)} aria-label="Preset actions" title="Preset actions">
+        <button className="btn btn-icon" onClick={() => setMenuOpen((o) => !o)} aria-label="More actions" title="More actions">
           ⋯
         </button>
         {menuOpen && (
@@ -78,6 +80,8 @@ export function PresetBar({ presets, activeId, onSelect, onRename, onAdd, onDupl
             <hr />
             <button onClick={exportFile}>Export JSON</button>
             <button onClick={() => fileRef.current?.click()}>Import JSON</button>
+            <hr />
+            <button onClick={() => { onToggleTheme(); setMenuOpen(false) }}>{theme === 'dark' ? 'Light mode' : 'Dark mode'}</button>
             <input ref={fileRef} type="file" accept="application/json" hidden onChange={(e) => void importFile(e.target.files?.[0])} />
           </div>
         )}
