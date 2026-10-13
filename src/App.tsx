@@ -12,6 +12,7 @@ import { Toolbar } from './components/Toolbar'
 import type { EventId } from './sound/events'
 import { selectEventsToPlay } from './sound/select'
 import { useSoundConfig } from './sound/useSoundConfig'
+import { TttLogo } from './components/TttLogo'
 
 const timeNow = () => new Date().toLocaleTimeString([], { hour12: false, minute: '2-digit', second: '2-digit' })
 
@@ -118,9 +119,9 @@ export default function App() {
     <div className="app">
       <header className="topbar">
         <div className="brand">
-          <span className="brand-mark" />
-          <span className="brand-name">Chess Sound Lab</span>
-          <span className="brand-sub">Take Take Take</span>
+          <TttLogo />
+          <span className="brand-lab" aria-hidden="true">Sound<br />Lab</span>
+          <span className="sr-only">Take Take Take Sound Lab</span>
         </div>
         <PresetBar
           presets={state.presets}
