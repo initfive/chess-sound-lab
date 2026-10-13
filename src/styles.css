@@ -619,6 +619,22 @@ input[type='range']::-moz-range-thumb {
 .event-offset input[type='number'] {
   width: 52px;
 }
+/* Stepper arrows only on hover or focus. */
+.event-offset input[type='number'] {
+  -moz-appearance: textfield;
+}
+.event-offset input[type='number']:hover,
+.event-offset input[type='number']:focus {
+  -moz-appearance: auto;
+}
+.event-offset input[type='number']::-webkit-inner-spin-button,
+.event-offset input[type='number']::-webkit-outer-spin-button {
+  opacity: 0;
+}
+.event-offset input[type='number']:hover::-webkit-inner-spin-button,
+.event-offset input[type='number']:focus::-webkit-inner-spin-button {
+  opacity: 1;
+}
 
 /* Chips */
 .chip {
