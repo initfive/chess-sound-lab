@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { library, sampleLabel, useSamples } from './audio/library'
+import { library, useSamples } from './audio/library'
 import { useAudioEngine } from './audio/useAudioEngine'
 import { useChessGame, type EventPayload } from './chess/useChessGame'
 import { Board } from './components/Board'
@@ -54,8 +54,7 @@ export default function App() {
         const cfg = preset.events[id]
         if (!cfg.sampleId) continue
         engine.play(cfg.sampleId, { volume: cfg.volume, offsetMs: cfg.offsetMs })
-        const sample = byIdRef.current.get(cfg.sampleId)
-        played.push({ event: id, sampleName: sample ? sampleLabel(sample) : cfg.sampleId })
+        played.push({ event: id, sampleName: byIdRef.current.get(cfg.sampleId)?.name ?? cfg.sampleId })
       }
       flash(toPlay)
       return { played, presetId: preset.id, presetName: preset.name }

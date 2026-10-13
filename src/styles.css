@@ -575,27 +575,6 @@ input[type='range']::-moz-range-thumb {
   border-top: 1px solid var(--border);
   transition: background 0.25s;
 }
-/* Two lines per row: controls and event name share one 32px line; hint and pack sit on the line below. */
-.event-row {
-  align-items: start;
-}
-.event-row > .switch {
-  margin-top: 6px;
-}
-.event-row .event-label {
-  line-height: 32px;
-}
-.event-row .event-hint {
-  margin-top: 2px;
-}
-.event-row .btn-play {
-  width: 32px;
-  height: 32px;
-}
-.event-row .event-volume,
-.event-row .event-offset {
-  height: 32px;
-}
 .event-row-off .event-name,
 .event-row-off .event-sample,
 .event-row-off .event-volume,
@@ -613,27 +592,18 @@ input[type='range']::-moz-range-thumb {
   width: 46px;
   height: 46px;
 }
-.event-sample-pick {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  min-width: 0;
-  flex: 1;
-}
-.event-sample-pack {
-  font-size: 11px;
-  color: var(--text-3);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
 .event-hint {
   font-size: 11px;
   color: var(--text-3);
 }
 .event-sample {
   display: flex;
+  align-items: center;
   gap: 6px;
+  min-width: 0;
+}
+.event-sample select {
+  flex: 1;
   min-width: 0;
 }
 .event-volume {

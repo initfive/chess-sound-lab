@@ -31,7 +31,6 @@ export function EventRow({ def, config, status, flash, onChange, onPreview }: Pr
       </div>
 
       <div className="event-sample">
-        <div className="event-sample-pick">
         <select
           value={config.sampleId ?? ''}
           onChange={(e) => onChange({ sampleId: e.target.value || null })}
@@ -51,8 +50,6 @@ export function EventRow({ def, config, status, flash, onChange, onPreview }: Pr
             </optgroup>
           ))}
         </select>
-          <span className="event-sample-pack">{sample ? setLabel(sample.set) : missing ? 'Missing file' : '\u00a0'}</span>
-        </div>
         <button
           className="btn btn-icon btn-play"
           onClick={onPreview}
