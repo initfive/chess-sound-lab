@@ -160,8 +160,9 @@ kbd {
 
 .layout {
   display: grid;
-  grid-template-columns: minmax(0, 1.3fr) minmax(380px, 560px);
-  column-gap: 20px;
+  /* Board column is exactly the board's size (set by the window height), so the board lines up under the logo; the panel takes the rest. */
+  grid-template-columns: min(calc(100vh - 210px), 60vw, 820px) minmax(380px, 1fr);
+  column-gap: 24px;
   row-gap: 14px;
   align-items: start;
 }
@@ -204,9 +205,8 @@ kbd {
   margin: 0;
 }
 .board-wrap {
-  width: min(100%, calc(100vh - 210px));
+  width: 100%;
   min-width: 320px;
-  margin: 0 auto;
   user-select: none;
   -webkit-user-select: none;
 }
@@ -888,12 +888,13 @@ input[type='range']::-moz-range-thumb {
 .bot-bar select {
   height: 30px;
   font-size: 13px;
+  max-width: 160px;
 }
 .bot-skill {
   display: flex;
   align-items: center;
   gap: 8px;
-  width: 170px;
+  width: 140px;
 }
 .engine-status {
   font-size: 12px;
