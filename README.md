@@ -1,8 +1,22 @@
 # Chess Sound Lab
 
-Interaction prototype for testing sound design for the Take Take Take chess app.
-Play chess on a board styled after their default "Royal" theme, and swap, tune
-and A/B compare the sounds each chess event triggers. Everything runs client-side.
+**Live:** [chess-sound-lab.vercel.app](https://chess-sound-lab.vercel.app)
+
+A tool for testing sounds in real games, built for Take Take Take, the chess app
+co-founded by Magnus Carlsen. Play on a board styled after their "Royal" theme,
+swap and tune the sound each chess event triggers, and replay the same game with
+different sound sets to compare them on the exact same moment. Everything runs
+client-side.
+
+![Board with move log, sound sets and per-event sounds](docs/board.jpg)
+
+![Sample library with sound sets and uploads](docs/library.jpg)
+
+**Stack:** React 19, TypeScript, Vite, chess.js, react-chessboard, Web Audio API,
+IndexedDB for uploads. Deployed on Vercel.
+
+**How it was built:** designed and built by [Matija Vojvodic](https://matijavojvodic.com)
+in code, working with Claude Code agents, with Figma kept in sync for exploration.
 
 ## Run
 
